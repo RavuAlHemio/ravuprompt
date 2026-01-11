@@ -54,6 +54,55 @@ WORDCHARS=""
 setopt promptsubst
 PROMPT='$("$HOME/bin/ravuprompt")'
 
+# terminal title magic
+function changetitles {
+	setopt localoptions
+	setopt nopromptsubst
+
+	tabname="$1"
+	if [ $# -gt 1 ]
+	then
+		winname="$2"
+	else
+		winname="$tabname"
+	fi
+
+	case "$TERM" in
+		cygwin|xterm*|putty*|rxvt*|konsole*|ansi|mlterm*|alacritty*|st*|foot*|contour*|wezterm*)
+			print -Pn "\e]2;${winname:q}\a"
+			print -Pn "\e]1;${tabname:q}\a"
+			;;
+		screen*|tmux*)
+			# set "hardstatus"
+			print -Pn "\ek${tabname:q}\e\\"
+			;;
+		*)
+			case "$TERM_PROGRAM" in
+				iTerm.app)
+					print -Pn "\e]2;${winname:q}\a"
+					print -Pn "\e]1;${tabname:q}\a"
+					;;
+				*)
+					# terminfo to the rescue?
+					if [ -n "${terminfo[tsl]}" -a -n "${terminfo[fsl]}" ]
+					then
+						print -Pn "${terminfo[tsl]}${tabname}${terminfo[fsl]}"
+					fi
+					;;
+			esac
+			;;
+	esac
+}
+function ravuprompt_title_precmd {
+	changetitles "%n@%m:%~"
+}
+function ravuprompt_title_preexec {
+	changetitles "$1"
+}
+autoload -U add-zsh-hook
+add-zsh-hook precmd ravuprompt_title_precmd
+add-zsh-hook preexec ravuprompt_title_preexec
+
 # life is a coloring book
 alias ls='/bin/ls --color=auto'
 alias grep='/bin/grep --color=auto'
