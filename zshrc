@@ -14,18 +14,37 @@ setopt EXTENDED_HISTORY
 # load completion logic
 autoload -U compinit; compinit
 
-# up and down arrow to search through history
+# modules to enable up and down arrow to search through history
 autoload -U up-line-or-beginning-search
 autoload -U down-line-or-beginning-search
 zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
+
+# keybindings
 for md in emacs viins vicmd
 do
+	# up arrow: search backward in history
 	bindkey -M "$md" "^[[A" up-line-or-beginning-search
 	[ -n "${terminfo[kcuu1]}" ] && bindkey -M "$md" "${terminfo[kcuu1]}" up-line-or-beginning-search
 
+	# down arrow: search backward in history
 	bindkey -M "$md" "^[[B" down-line-or-beginning-search
 	[ -n "${terminfo[kcud1]}" ] && bindkey -M "$md" "${terminfo[kcud1]}" down-line-or-beginning-search
+
+	# ctrl + left arrow: back one word
+	bindkey -M "$md" '^[[1;5D' backward-word
+
+	# ctrl + right arrow: forward one word
+	bindkey -M "$md" '^[[1;5C' forward-word
+
+	if [ -n "${terminfo[kdch1]}" ]
+	then
+		bindkey -M "$md" "${terminfo[kdch1]}" delete-char
+	else
+		# two common delete characters
+		bindkey -M "$md" "^[[3~" delete-char
+		bindkey -M "$md" "^[3;5~" delete-char
+	fi
 done
 
 # Ctrl-W deletes less
