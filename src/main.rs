@@ -1,5 +1,5 @@
 use std::ffi::{CStr, OsStr, c_char};
-use std::fmt::Write;
+use std::fmt::{self, Write};
 use std::io;
 use std::os::unix::ffi::OsStrExt;
 use std::path::PathBuf;
@@ -33,6 +33,23 @@ fn color_start_for(s: &str) -> &'static str {
     let index_u8 = hashify(s);
     let index: usize = index_u8.into();
     &COLOR_STARTS[index % COLOR_STARTS.len()]
+}
+
+
+struct EscapePercentStr<'a>(pub &'a str);
+impl<'a> fmt::Display for EscapePercentStr<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut first_iteration = true;
+        for piece_between_percent in self.0.split('%') {
+            if first_iteration {
+                first_iteration = false;
+            } else {
+                write!(f, "%%")?;
+            }
+            write!(f, "{}", piece_between_percent)?;
+        }
+        Ok(())
+    }
 }
 
 
@@ -234,8 +251,10 @@ fn main() {
         color_start_for(&username)
     };
     let hostname_color_start = color_start_for(&hostname);
+    let escaped_username = EscapePercentStr(&username);
+    let escaped_hostname = EscapePercentStr(&hostname);
     println!();
-    println!("{username_color_start}%B{username}%b%f@{hostname_color_start}%B{hostname}%b%f %~");
+    println!("{username_color_start}%B{escaped_username}%b%f@{hostname_color_start}%B{escaped_hostname}%b%f %~");
 
     let dollar_sign = if uid == 0 { "#" } else { "$" };
     println!("{git_info}{dollar_sign} ");
