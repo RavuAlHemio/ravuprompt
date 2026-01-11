@@ -257,5 +257,5 @@ fn main() {
     println!("{username_color_start}%B{escaped_username}%b%f@{hostname_color_start}%B{escaped_hostname}%b%f %~");
 
     let dollar_sign = if uid == 0 { "#" } else { "$" };
-    println!("{git_info}{dollar_sign} ");
+    println!("{git_info}%(?..%F{OB}red{CB}%B[%?]%b%f )%B{dollar_sign}%b ");
 }
