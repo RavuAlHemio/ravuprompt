@@ -215,7 +215,8 @@ fn main() {
     let (username, _home_dir) = get_username_and_home_dir(uid).unwrap();
 
     // gimme hostname
-    let hostname = get_hostname().unwrap();
+    let full_hostname = get_hostname().unwrap();
+    let hostname = full_hostname.split(".").nth(0).unwrap();
 
     // git?
     let git_info = if is_git_repo() && !ignore_git("ravuprompt.ignorerepo") {
