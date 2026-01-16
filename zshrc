@@ -11,6 +11,9 @@ setopt INC_APPEND_HISTORY
 # store timestamps with history
 setopt EXTENDED_HISTORY
 
+# don't remember commands that start with a space
+setopt histignorespace
+
 # load completion logic
 autoload -U compinit; compinit
 
