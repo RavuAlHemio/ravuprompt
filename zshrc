@@ -26,6 +26,12 @@ zle -N down-line-or-beginning-search
 # keybindings
 for md in emacs viins vicmd
 do
+	# ctrl + a: go to beginning
+	bindkey -M "$md" "^A" beginning-of-line
+
+	# ctrl + e: go to end
+	bindkey -M "$md" "^E" end-of-line
+
 	# up arrow: search backward in history
 	bindkey -M "$md" "^[[A" up-line-or-beginning-search
 	[ -n "${terminfo[kcuu1]}" ] && bindkey -M "$md" "${terminfo[kcuu1]}" up-line-or-beginning-search
