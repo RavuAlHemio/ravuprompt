@@ -54,6 +54,12 @@ do
 		bindkey -M "$md" "^[[3~" delete-char
 		bindkey -M "$md" "^[3;5~" delete-char
 	fi
+
+	# backspace: delete line breaks too, despite vi mode
+	for bksp in '^H' '^?'
+	do
+		bindkey -M "$md" "$bksp" backward-delete-char
+	done
 done
 
 # Ctrl-W deletes less
