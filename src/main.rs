@@ -233,7 +233,9 @@ fn main() {
             String::new()
         };
 
-        if !ignore_git("ravuprompt.ignoredirty") {
+        if ignore_git("ravuprompt.ignoredirty") {
+            write!(inner_git_info, "%F{OB}red{CB}?%f").unwrap();
+        } else {
             if is_git_dirty().unwrap_or(false) {
                 write!(inner_git_info, "%F{OB}red{CB}%B*%b%f").unwrap();
             }
