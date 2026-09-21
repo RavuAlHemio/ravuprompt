@@ -26,6 +26,13 @@ jobs:
           path: |
             zshrc
             target/debug/ravuprompt
+      - name: release
+        uses: softprops/action-gh-release@v3
+        if: github.ref_type == 'tag'
+        with:
+          files: |
+            zshrc
+            target/debug/ravuprompt
   build-release:
     runs-on: ubuntu-latest
     container: archlinux:base-devel
@@ -51,6 +58,13 @@ jobs:
           path: |
             zshrc
             target/release/ravuprompt
+      - name: release
+        uses: softprops/action-gh-release@v3
+        if: github.ref_type == 'tag'
+        with:
+          files: |
+            zshrc
+            target/release/ravuprompt
   build-release-musl:
     runs-on: ubuntu-latest
     container: archlinux:base-devel
@@ -72,5 +86,12 @@ jobs:
         with:
           name: ravuprompt-release-musl
           path: |
+            zshrc
+            target/x86_64-unknown-linux-musl/release/ravuprompt
+      - name: release
+        uses: softprops/action-gh-release@v3
+        if: github.ref_type == 'tag'
+        with:
+          files: |
             zshrc
             target/x86_64-unknown-linux-musl/release/ravuprompt
