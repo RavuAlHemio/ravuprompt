@@ -28,13 +28,15 @@ jobs:
           path: |
             zshrc
             target/debug/ravuprompt
+      - name: gift-wrap release
+        run: tar -czf ravuprompt-linux-debug-x86_64-${{ github.ref_name }}.tar.gz zshrc -C target/debug/ ravuprompt
+        if: github.ref_type == 'tag'
       - name: release
         uses: softprops/action-gh-release@v3
         if: github.ref_type == 'tag'
         with:
           files: |
-            zshrc
-            target/debug/ravuprompt
+            ravuprompt-linux-debug-x86_64-${{ github.ref_name }}.tar.gz
   build-release:
     runs-on: ubuntu-latest
     container: archlinux:base-devel
@@ -62,13 +64,15 @@ jobs:
           path: |
             zshrc
             target/release/ravuprompt
+      - name: gift-wrap release
+        run: tar -czf ravuprompt-linux-release-x86_64-${{ github.ref_name }}.tar.gz zshrc -C target/release/ ravuprompt
+        if: github.ref_type == 'tag'
       - name: release
         uses: softprops/action-gh-release@v3
         if: github.ref_type == 'tag'
         with:
           files: |
-            zshrc
-            target/release/ravuprompt
+            ravuprompt-linux-release-x86_64-${{ github.ref_name }}.tar.gz
   build-release-musl:
     runs-on: ubuntu-latest
     container: archlinux:base-devel
@@ -94,10 +98,12 @@ jobs:
           path: |
             zshrc
             target/x86_64-unknown-linux-musl/release/ravuprompt
+      - name: gift-wrap release
+        run: tar -czf ravuprompt-linuxmusl-release-x86_64-${{ github.ref_name }}.tar.gz zshrc -C target/x86_64-unknown-linux-musl/release/ ravuprompt
+        if: github.ref_type == 'tag'
       - name: release
         uses: softprops/action-gh-release@v3
         if: github.ref_type == 'tag'
         with:
           files: |
-            zshrc
-            target/x86_64-unknown-linux-musl/release/ravuprompt
+            ravuprompt-linuxmusl-release-x86_64-${{ github.ref_name }}.tar.gz
