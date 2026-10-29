@@ -32,6 +32,9 @@ do
 	# ctrl + e: go to end
 	bindkey -M "$md" "^E" end-of-line
 
+	# ctrl + t: transpose chars
+	bindkey -M "$md" "^T" transpose-chars
+
 	# up arrow: search backward in history
 	bindkey -M "$md" "^[[A" up-line-or-beginning-search
 	[ -n "${terminfo[kcuu1]}" ] && bindkey -M "$md" "${terminfo[kcuu1]}" up-line-or-beginning-search
